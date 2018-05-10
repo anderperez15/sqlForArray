@@ -1,0 +1,67 @@
+/*
+var perro = [
+    {id:'A76', edad:9,nombre:'fito',dueños:['andres','alex'],padres:[{raza:"pequines",g:"m"},{raza:"pequines",g:"f"}]},
+    {id:'A36', edad:2,nombre:'spaek',dueños:['carlos'],padres:[{raza:"pequines",g:"m"},{raza:"pequines",g:"f"}]},
+    {id:'A56', edad:4,nombre:'bob',dueños:['pedro','carlos'],padres:[{raza:"pequines",g:"m"},{raza:"pequines",g:"f"}]},
+    {id:'Af6', edad:5,nombre:'firulae',dueños:['juan','pedro'],padres:[{raza:"pequines",g:"m"},{raza:"pequines",g:"f"}]},
+    {id:'AL6', edad:1,nombre:'fito',dueños:['andres','juan'],padres:[{raza:"zx",g:"m"},{raza:"pequines",g:"f"}]}
+]
+*/
+// sqlForArray ('select perro.id,perro.edad from perro where perro.edad < 5',perro)
+//sqlForArray ('select perro.id,perro.dueños from perro where perro._dueños_  => "alex"',perro)
+//sqlForArray('select * from perro where perro._padres_ => (index == "zx")',perro)
+//sqlForArray('select * from perro where perro._padres_ ~> (raza == "zx") and perro.edad <> 5 and perro.nombre<>fito ',perro)
+
+var queryString = require('./queryString');
+
+const comparadores = [
+    "=",
+    "<>",
+    "!=",
+    "=>",
+    "~>",
+    ">=",
+    "<=",
+    ">",
+    "<"
+];
+
+const objLogicosInternos = [
+    "&",
+    "|"
+];
+
+const encapsuladores = [
+    "(",
+    ")",
+    "[",
+    "]",
+    "{",
+    "}"
+];
+
+
+sqlForArray = (query, Array_1) => {
+    var driver = {};
+    driver.tabla = Array_1;
+     var query = queryString(query);
+     driver.propiedades = Object.getOwnPropertyNames(Array_1[0]).map(obj => query.aliasTabla+"."+obj);
+     driver.condiciones = query.condiciones
+     if(query.select[0] =="*"){
+        query.select = driver.propiedades;
+     }
+     console.log(query)
+     driver.response = [];
+     for (var _i = 0; _i < driver.tabla.length; _i++){
+        var json = [];
+        for (var _n = 0; _n < query.select.length; _n++){
+            json[_n] = '"'+query.select[_n].slice(query.aliasTabla.length+1)+'":'+JSON.stringify(Object.getOwnPropertyDescriptor(driver.tabla[_i],query.select[_n].slice(query.aliasTabla.length+1)).value);
+        };
+        
+            driver.response.push( JSON.parse('{'+json.join(',')+'}'));
+        
+     };
+     return driver.response;
+}
+
+ module.exports = sqlForArray;
