@@ -38,7 +38,7 @@ sqlForArray = (query, Array_1) => {
      driver.response = [];
      for (var _i = 0; _i < driver.tabla.length; _i++){
         var json = [];
-        if(isTrue(query.condiciones,driver.tabla[_i],props)){
+        if(isTrue(query.condiciones,driver.tabla[_i],props,query.aliasTabla)){
             for (var _n = 0; _n < query.select.length; _n++){
                 
                 json[_n] = '"'+query.select[_n].slice(query.aliasTabla.length+1)+'":'+JSON.stringify(Object.getOwnPropertyDescriptor(driver.tabla[_i],query.select[_n].slice(query.aliasTabla.length+1)).value);

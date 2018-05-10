@@ -13,13 +13,11 @@ const queryString = sql => {
     query.aliasTabla = other[0].trim();
     query.condiciones=other[1].trim();
     if (objLogicosExternos[1].some(obj => -1 != query.condiciones.indexOf(obj))){
-        condiciones = (query.condiciones.split(objLogicosExternos[1].filter(obj => -1 != query.condiciones.indexOf(obj))[0]));
-        console.log(condiciones)
+        condiciones = (query.condiciones.split(objLogicosExternos[1].filter(obj => -1 != query.condiciones.indexOf(obj))));
     }else{
         condiciones.push(query.condiciones)
     };
     var ok = [];
-    if(objLogicosExternos[0].some(obj => -1 != query.condiciones.indexOf(obj))){
         for(var i = 0; i < condiciones.length; i++ ){
             if(objLogicosExternos[0].some(obj => -1 != condiciones[i].indexOf(obj))){
                 ok.push(condiciones[i].split(objLogicosExternos[0].filter(obj => -1 != condiciones[i].indexOf(obj))));
@@ -27,10 +25,8 @@ const queryString = sql => {
                 ok.push(new Array(condiciones[i]))
             }
         }
-    }else{
-        ok.push(new Array(query.condiciones))
-    }
     query.condiciones = ok;
+    console.log(query.condiciones)
     return query;
 };
 
