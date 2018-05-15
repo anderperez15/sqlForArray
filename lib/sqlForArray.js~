@@ -1,0 +1,10 @@
+const queryString = require("./queryString");
+
+const sqlForArray = (sql,obj) => {
+  let query = queryString(sql);
+  let propiedades = Object.getOwnPropertyNames(obj);
+  if (query.select == "*") {
+    query.select = propiedades;
+  };
+  
+};
